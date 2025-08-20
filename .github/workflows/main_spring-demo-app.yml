@@ -24,12 +24,13 @@ jobs:
           java-version: '21'
           distribution: 'microsoft'
 
-      - name: Build with Maven
+      - name: Build with Maven (use SQL Server secrets)
         env:
-            DB_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
-            DB_USER: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
-            DB_PASS: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
-        run: mvn clean install
+          SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+        run: mvn -B -DskipTests=false clean install
+
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -66,4 +67,5 @@ jobs:
           package: '*.jar'
 
           
+
 
